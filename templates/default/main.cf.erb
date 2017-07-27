@@ -1,0 +1,65 @@
+# Chef generated file. Do not edit.
+
+queue_directory = /var/spool/postfix
+command_directory = /usr/sbin
+daemon_directory = /usr/libexec/postfix
+data_directory = /var/lib/postfix
+mail_owner = <%= node['postfix']['user'] %>
+
+<% if node['postfix']['hostname'] %>
+myhostname = <%= node['postfix']['hostname'] %>
+<% else %>
+# NOTE: default is to use the fully-qualified domain name from gethostname()
+#myhostname = host.domain.tld
+<% end %>
+<% if node['postfix']['domain'] %>
+mydomain = <%= node['postfix']['domain'] %>
+<% else %>
+# NOTE: default is to use $myhostname minus the first component
+#mydomain = domain.tld
+<% end %>
+
+<% if node['postfix']['origin']['hostname'] == true %>myorigin = $myhostname<% end %>
+<% if node['postfix']['origin']['domain'] == true %>myorigin = $mydomain<% end %>
+
+mydestination = <%= node['postfix']['mydestination'] %>
+
+inet_interfaces = <%= node['postfix']['inet_interfaces'] %>
+inet_protocols = <%= node['postfix']['inet_protocols'] %>
+
+mynetworks_style = <%= node['postfix']['network_style'] %>
+
+<% if node['postfix']['networks'] %>mynetworks = <%= node['postfix']['networks'] %><% end %>
+<% if node['postfix']['relay_domains'] %>relay_domains = <%= node['postfix']['relay_domains'] %><% end %>
+<% if node['postfix']['relayhost'] %>relayhost = <%= node['postfix']['relayhost'] %><% end %>
+
+alias_maps = hash:/etc/aliases
+alias_database = hash:/etc/aliases
+sendmail_path = <%= node['postfix']['sendmail_path'] %>
+newaliases_path = /usr/bin/newaliases.postfix
+mailq_path = /usr/bin/mailq.postfix
+unknown_local_recipient_reject_code = 550
+setgid_group = postdrop
+html_directory = no
+manpage_directory = /usr/share/man
+ 
+# DEBUGGING CONTROL
+#
+# The debug_peer_level parameter specifies the increment in verbose
+# logging level when an SMTP client or server host name or address
+# matches a pattern in the debug_peer_list parameter.
+#
+debug_peer_level = 2
+
+# The debug_peer_list parameter specifies an optional list of domain
+# or network patterns, /file/name patterns or type:name tables. When
+# an SMTP client or server host name or address matches a pattern,
+# increase the verbose logging level by the amount specified in the
+# debug_peer_level parameter.
+#
+#debug_peer_list = 127.0.0.1
+#debug_peer_list = some.domain
+
+debugger_command =
+	 PATH=/bin:/usr/bin:/usr/local/bin:/usr/X11R6/bin
+	 ddd $daemon_directory/$process_name $process_id & sleep 5
