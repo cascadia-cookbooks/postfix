@@ -1,9 +1,11 @@
 # Chef generated file. Do not edit.
 
-queue_directory = /var/spool/postfix
-command_directory = /usr/sbin
-daemon_directory = /usr/libexec/postfix
-data_directory = /var/lib/postfix
+compatibility_level = <%= node['postfix']['compatibility_level'] %>
+
+queue_directory = <%= node['postfix']['queue_directory'] %>
+command_directory = <%= node['postfix']['command_directory'] %>
+daemon_directory = <%= node['postfix']['daemon_directory'] %>
+data_directory = <%= node['postfix']['data_directory'] %>
 mail_owner = <%= node['postfix']['user'] %>
 
 <% if node['postfix']['hostname'] %>
