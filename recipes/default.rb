@@ -3,7 +3,7 @@
 # Recipe:: default
 #
 
-package 'postfix' do
+package node['postfix']['packages'] do
     action :install
 end
 
